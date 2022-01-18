@@ -5,7 +5,6 @@ const app = require('./app');
 //normalizePort renvoie un port valide(numéro/chaîne)
 const normalizePort = val => {
     const port = parseInt(val, 10);
-
     if (isNaN(port)) {
         return val;
     }

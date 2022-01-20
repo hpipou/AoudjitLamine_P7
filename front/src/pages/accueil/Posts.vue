@@ -1,82 +1,84 @@
 <template>
 
-    <div class="show-post container">
-        <button v-on:click="selectCategory('RECENT')" class="btn-category btn-primary"
-                :class="{active: category === 'RECENT'}">
-            Récent
-        </button>
-        <button v-on:click="selectCategory('POPULAIRE')" class="btn-category btn-primary"
-                :class="{active: category === 'POPULAIRE'}">
-            Populaire
-        </button>
-    </div>
-    <div class="container" :key="index" v-for="(post, index) in posts">
-        <div class="row">
-            <header>
-                <div class="user">
-                    <router-link to="/profile">
-                        <UserIcon :user="post.User" :size="50"></UserIcon>
-                    </router-link>
-                    <div class="user-name">
-                        <p>
-                            <strong>{{post.User.pseudo}}</strong>
-                        </p>
-                        <p class="date">
-                            <em>{{post.createdAt}}</em>
-                        </p>
-                    </div>
-                </div>
-                <div v-if="post.userId === myUser.id || myUser.isAdmin" class="modified">
-                    <font-awesome-icon v-on:click="toggleMenu(post.id)" class="icon-show-menu" icon="ellipsis-v"/>
-                    <div v-if="showMenu[post.id]" class="show-menu-modified">
-                        <div class="overlay" v-on:click="toggleMenu(post.id)"></div>
-                        <div class="background">
-                            <ul>
-                                <li v-on:click="togglePostPopup" v-if="post.userId === myUser.id">
-                                    <p>Modifier</p>
-                                    <font-awesome-icon class="icon-modified" icon="pen"/>
-                                </li>
-                                <li v-on:click="deletePost(post.id, index)">
-                                    <p>Supprimer</p>
-                                    <font-awesome-icon class="icon-deleted" icon="trash-alt"/>
-                                </li>
-                            </ul>
-                            <EditPost :reveal="reveal" :togglePostPopup="togglePostPopup" :postToEdit="post"/>
+    <div>
+        <div class="show-post container">
+            <button v-on:click="selectCategory('RECENT')" class="btn-category btn-primary"
+                    :class="{active: category === 'RECENT'}">
+                Récent
+            </button>
+            <button v-on:click="selectCategory('POPULAIRE')" class="btn-category btn-primary"
+                    :class="{active: category === 'POPULAIRE'}">
+                Populaire
+            </button>
+        </div>
+        <div class="container" :key="index" v-for="(post, index) in posts">
+            <div class="row">
+                <header>
+                    <div class="user">
+                        <router-link to="/profile">
+                            <UserIcon :user="post.User" :size="50"></UserIcon>
+                        </router-link>
+                        <div class="user-name">
+                            <p>
+                                <strong>{{post.User.pseudo}}</strong>
+                            </p>
+                            <p class="date">
+                                <em>{{post.createdAt}}</em>
+                            </p>
                         </div>
                     </div>
+                    <div v-if="post.userId === myUser.id || myUser.isAdmin" class="modified">
+                        <font-awesome-icon v-on:click="toggleMenu(post.id)" class="icon-show-menu" icon="ellipsis-v"/>
+                        <div v-if="showMenu[post.id]" class="show-menu-modified">
+                            <div class="overlay" v-on:click="toggleMenu(post.id)"></div>
+                            <div class="background">
+                                <ul>
+                                    <li v-on:click="togglePostPopup" v-if="post.userId === myUser.id">
+                                        <p>Modifier</p>
+                                        <font-awesome-icon class="icon-modified" icon="pen"/>
+                                    </li>
+                                    <li v-on:click="deletePost(post.id, index)">
+                                        <p>Supprimer</p>
+                                        <font-awesome-icon class="icon-deleted" icon="trash-alt"/>
+                                    </li>
+                                </ul>
+                                <EditPost :reveal="reveal" :togglePostPopup="togglePostPopup" :postToEdit="post"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </header>
+                <div class="content">
+                    <p>
+                        {{post.content}}
+                    </p>
                 </div>
+                <div v-if="post.urlMedia" class="photo">
+                    <img v-if="post.mediaType === 'IMAGE'" :src="post.urlMedia" alt="media"/>
+                    <video controls v-if="post.mediaType === 'VIDEO'" :src="post.urlMedia"></video>
+                </div>
+                <div class="param">
+                    <div class="flex">
+                        <font-awesome-icon v-on:click="sendLike(post, index,post.iLiked ? 0 : 1)"
+                                        :class="{'liked': post.iLiked}" class="icon-arrow-up" icon="arrow-up"/>
+                        <p class="up">{{post.likeCount}}</p>
+                    </div>
+                    <div class="flex">
+                        <font-awesome-icon v-on:click="sendLike(post, index,post.iDisliked ? 0 : -1)"
+                                        :class="{'disliked': post.iDisliked}" class="icon-arrow-down" icon="arrow-down"/>
+                        <p class="up">{{post.dislikeCount}}</p>
+                    </div>
 
+                    <div class="flex">
+                        <font-awesome-icon v-on:click="toggleComment(post.id)" class="icon-comment" icon="comment-alt"/>
+                        <p class="up">{{post.commentCount}}</p>
+                    </div>
 
-            </header>
-            <div class="content">
-                <p>
-                    {{post.content}}
-                </p>
+                </div>
+                <comments :post="post" :updateCommentCount="($event) => updateCommentCount($event, index)"
+                        v-if="showComments[post.id]"/>
             </div>
-            <div v-if="post.urlMedia" class="photo">
-                <img v-if="post.mediaType === 'IMAGE'" :src="post.urlMedia" alt="media"/>
-                <video controls v-if="post.mediaType === 'VIDEO'" :src="post.urlMedia"></video>
-            </div>
-            <div class="param">
-                <div class="flex">
-                    <font-awesome-icon v-on:click="sendLike(post, index,post.iLiked ? 0 : 1)"
-                                       :class="{'liked': post.iLiked}" class="icon-arrow-up" icon="arrow-up"/>
-                    <p class="up">{{post.likeCount}}</p>
-                </div>
-                <div class="flex">
-                    <font-awesome-icon v-on:click="sendLike(post, index,post.iDisliked ? 0 : -1)"
-                                       :class="{'disliked': post.iDisliked}" class="icon-arrow-down" icon="arrow-down"/>
-                    <p class="up">{{post.dislikeCount}}</p>
-                </div>
-
-                <div class="flex">
-                    <font-awesome-icon v-on:click="toggleComment(post.id)" class="icon-comment" icon="comment-alt"/>
-                    <p class="up">{{post.commentCount}}</p>
-                </div>
-
-            </div>
-            <comments :post="post" :updateCommentCount="($event) => updateCommentCount($event, index)"
-                      v-if="showComments[post.id]"/>
         </div>
     </div>
 
@@ -271,7 +273,6 @@
                             margin-bottom: 5px !important;
                             margin-left: 10px;
                         }
-
                         .date {
                             font-size: 0.7em;
                             margin-left: 10px;
@@ -353,18 +354,15 @@
 
                     }
                 }
-
                 .icon-modified {
                     color: #f9abab;
                     font-size: 1.3em;
                 }
             }
-
             .content {
                 margin-top: 15px;
                 padding: 0px 20px;
             }
-
             .photo {
                 max-width: 100%;
                 overflow: hidden;
@@ -381,7 +379,6 @@
                 max-width: 100%;
                 object-fit: cover;
             }
-
             .param {
                 display: flex;
                 justify-content: flex-start;
@@ -403,7 +400,6 @@
                             color: forestgreen;
                         }
                     }
-
                     .icon-arrow-down {
                         color: #f9abab;
                         font-size: 1.3em;
@@ -416,7 +412,6 @@
                         }
 
                     }
-
                     .icon-comment {
                         color: #f9abab;
                         font-size: 1.3em;
@@ -434,18 +429,15 @@
         }
     }
 
-    @media screen and (max-width: 992px) {
-
+@media screen and (max-width: 992px) {
         .btn-category {
             margin-bottom: 10px;
         }
-
         .show-post {
             max-width: 100% !important;
             padding: 0 !important;
             margin: 30px 0px !important;
             text-align: center;
-
         }
         .container {
             max-width: 100% !important;
@@ -459,6 +451,5 @@
         }
 
     }
-
 
 </style>

@@ -14,12 +14,7 @@
             <div class="row">
                 <header>
                     <div class="user">
-                        <router-link to="/profile">
-                            <UserIcon :user="post.User" :size="50"></UserIcon>
-                        </router-link>
-                        
                         <UserIcon :user="post.User" :size="50"></UserIcon>
-                        
                         <div class="user-name">
                             <p>
                                 <strong>{{post.User.pseudo}}</strong>

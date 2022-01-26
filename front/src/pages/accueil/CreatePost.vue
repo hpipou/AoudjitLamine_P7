@@ -1,11 +1,7 @@
 <template>
     <div class="container">
         <div class="input-container">
-            <div>
-                <router-link to="/profile">
-                    <UserIcon :user="user" :size="45"></UserIcon>
-                </router-link>
-            </div>
+            <UserIcon :user="user" :size="45"></UserIcon>
             <div class="input">
                 <input v-on:click="togglePostPopup" type="text" placeholder="Dites bonjour !">
             </div>
@@ -17,8 +13,6 @@
 <script>
     import UserIcon from "../layout/UserIcon";
     import EditPost from "./EditPost";
-
-
     export default {
         name: "CreatePost",
         components: {

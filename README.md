@@ -2,8 +2,11 @@
 
 Les étapes pour lancer le projet :
 
+## IMPORTANT :
+
+il faut installer sur votre systeme d'exploitation MySQL avant de lancer le backend.
+
 1. Backend :
-   (IMPORTANT : il faut installer sur votre systeme d'exploitation MySQL avant de lancer le backend)
 
 Exécuter les commandes :
 

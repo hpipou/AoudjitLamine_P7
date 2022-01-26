@@ -19,8 +19,6 @@ import { faCogs } from '@fortawesome/free-solid-svg-icons'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { faHome } from '@fortawesome/free-solid-svg-icons'
 
-
-
 library.add(faSignOutAlt);
 library.add(faUser);
 library.add(faImage);
@@ -34,12 +32,5 @@ library.add(faEllipsisV);
 library.add(faCogs);
 library.add(faBars);
 library.add(faHome);
-
-
-
-
-
-
-
 
 createApp(App).use(router).mount('#app')

@@ -1,5 +1,4 @@
 <template>
-
     <div>
         <div class="show-post container">
             <button v-on:click="selectCategory('RECENT')" class="btn-category btn-primary"
@@ -18,6 +17,9 @@
                         <router-link to="/profile">
                             <UserIcon :user="post.User" :size="50"></UserIcon>
                         </router-link>
+                        
+                        <UserIcon :user="post.User" :size="50"></UserIcon>
+                        
                         <div class="user-name">
                             <p>
                                 <strong>{{post.User.pseudo}}</strong>
@@ -81,7 +83,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -91,7 +92,6 @@
     import moment from "moment";
     import UserIcon from "../layout/UserIcon";
     import EditPost from "./EditPost";
-
 
     export default {
         name: "Posts",
@@ -295,7 +295,6 @@
                     }
 
                 }
-
                 .show-menu-modified {
                     .overlay {
                         position: fixed;
@@ -305,7 +304,6 @@
                         right: 0;
 
                     }
-
                     .background {
                         background-color: white;
                         border-radius: 5px;
@@ -313,7 +311,6 @@
                         position: absolute;
                         right: 0;
                         top: 22px;
-
 
                         ul {
                             list-style-type: none;
@@ -351,7 +348,6 @@
                                 }
                             }
                         }
-
                     }
                 }
                 .icon-modified {
@@ -384,11 +380,9 @@
                 justify-content: flex-start;
                 padding: 20px 20px 0;
                 box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-
                 .flex {
                     display: flex;
                     margin-right: 20px;
-
                     .icon-arrow-up {
                         color: #f9abab;
                         font-size: 1.3em;
@@ -410,7 +404,6 @@
                         &.disliked, &:hover {
                             color: #fc3c14;
                         }
-
                     }
                     .icon-comment {
                         color: #f9abab;
@@ -418,11 +411,9 @@
                         font-weight: bolder;
                         margin-right: 5px;
                         cursor: pointer;
-
                         &:hover {
                             color: #fdc3c3;
                         }
-
                     }
                 }
             }
@@ -446,10 +437,7 @@
                 max-width: 100% !important;
                 margin: 0 !important;
                 padding: 10px 10px;
-
             }
         }
-
     }
-
 </style>

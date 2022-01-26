@@ -1,103 +1,105 @@
 <template>
-    <Nav/>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="content">
-                    <header>
-                        <font-awesome-icon icon="user" class="user"/>
-                        <h4>Photo de profile</h4>
-                    </header>
-                    <div class="container-photo">
+    <div>
+        <Nav/>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="content">
+                        <header>
+                            <font-awesome-icon icon="user" class="user"/>
+                            <h4>Photo de profile</h4>
+                        </header>
+                        <div class="container-photo">
 
-                        <img v-if="url || myUser.profileUrl" :src="url || myUser.profileUrl"/>
-                        <div v-else>
-                            <img src="../../../src/assets/profile.jpeg" alt="photo de profile" class="imgDefault">
+                            <img v-if="url || myUser.profileUrl" :src="url || myUser.profileUrl"/>
+                            <div v-else>
+                                <img src="../../../src/assets/profile.jpeg" alt="photo de profile" class="imgDefault">
+                            </div>
+
                         </div>
+                    </div>
+                    <div class="btns-photo">
+                        <label class="custom-file-upload">
+                            Ajouter une photo
+                            <input id="file-input" type="file" accept=".jpg, .jpeg, .png" ref="fileUpload"
+                                @change="onFileChange"/>
+                        </label>
 
+                        <button v-on:click="sendPhoto" :class="{'disabled': !file }" :disabled="!file" aria-disabled="true"
+                                class="btn-send-photo btn-primary">Appliquer
+                        </button>
                     </div>
                 </div>
-                <div class="btns-photo">
-                    <label class="custom-file-upload">
-                        Ajouter une photo
-                        <input id="file-input" type="file" accept=".jpg, .jpeg, .png" ref="fileUpload"
-                               @change="onFileChange"/>
-                    </label>
 
-                    <button v-on:click="sendPhoto" :class="{'disabled': !file }" :disabled="!file" aria-disabled="true"
-                            class="btn-send-photo btn-primary">Appliquer
-                    </button>
+                <div class="col">
+                    <div class="header-param">
+                        <font-awesome-icon class="icon-param" icon="cogs"/>
+                        <h4>Paramètres</h4>
+                    </div>
+
+                    <form @submit.prevent="updatePseudo">
+                        <div class="form-group">
+                            <label for="pseudo">Changer le pseudo :</label>
+                            <input type="text" id="pseudo" :class="{'is-invalid': v$.pseudo.$error}"
+                                class="form-control" v-model.trim="v$.pseudo.$model" placeholder="Pseudo">
+                            <div v-for="error of v$.pseudo.$errors" :key="error.$uid" class="error">
+                                <span>{{error.$message}}</span>
+                            </div>
+                            <div v-if="signUpErrorPseudo" class="error2">
+                                <span>{{signUpErrorPseudo}}</span>
+                            </div>
+
+                        </div>
+                        <button class="btn-send-data btn-primary">Appliquer</button>
+                    </form>
+
+                    <form @submit.prevent="updatePassword">
+                        <div class="form-group">
+                            <label>Changer le mot de passe :</label>
+                            <input type="password" id="password" :class="{'is-invalid': v$.password.$error}"
+                                class="form-control" v-model.trim="v$.password.$model"
+                                placeholder="Actuel">
+                            <div v-for="error of v$.password.$errors" :key="error.$uid" class="error">
+                                <span>{{error.$message}}</span>
+                            </div>
+                            <input type="password" id="password-new" :class="{'is-invalid': v$.newPassword.$error}"
+                                class="form-control"
+                                v-model.trim="v$.newPassword.$model" placeholder="Nouveau mot de passe">
+                            <div v-for="error of v$.newPassword.$errors" :key="error.$uid" class="error">
+                                <span>{{error.$message}}</span>
+                            </div>
+                            <div v-if="signUpErrorPassword" class="error2">
+                                <span>{{signUpErrorPassword}}</span>
+                            </div>
+                        </div>
+
+                        <button class="btn-send-data btn-primary">Appliquer</button>
+                    </form>
+
+                    <div class="btns">
+                        <button type="button" v-on:click="toggleDelete" class="btn-deleted btn-primary">Supprimer le
+                            compte
+                        </button>
+                    </div>
                 </div>
+
             </div>
-
-            <div class="col">
-                <div class="header-param">
-                    <font-awesome-icon class="icon-param" icon="cogs"/>
-                    <h4>Paramètres</h4>
-                </div>
-
-                <form @submit.prevent="updatePseudo">
-                    <div class="form-group">
-                        <label for="pseudo">Changer le pseudo :</label>
-                        <input type="text" id="pseudo" :class="{'is-invalid': v$.pseudo.$error}"
-                               class="form-control" v-model.trim="v$.pseudo.$model" placeholder="Pseudo">
-                        <div v-for="error of v$.pseudo.$errors" :key="error.$uid" class="error">
-                            <span>{{error.$message}}</span>
+            <div class="bloc-register" v-if="showDelete">
+                <div class="overlay" v-on:click="toggleDelete"></div>
+                <div class="register card">
+                    <div class="header">
+                        <div class="title">
+                            <p>Voulez vous vraiment supprimer votre compte?</p>
                         </div>
-                        <div v-if="signUpErrorPseudo" class="error2">
-                            <span>{{signUpErrorPseudo}}</span>
-                        </div>
+                        <div v-on:click="toggleDelete" class="btn-close btn "></div>
+                    </div>
+                    <div class="btns-popup">
+                        <button v-on:click="deleteCompte" class="btn-yes">Confirmer</button>
+                        <button v-on:click="toggleDelete" class="btn-no">Annuler</button>
 
                     </div>
-                    <button class="btn-send-data btn-primary">Appliquer</button>
-                </form>
-
-                <form @submit.prevent="updatePassword">
-                    <div class="form-group">
-                        <label>Changer le mot de passe :</label>
-                        <input type="password" id="password" :class="{'is-invalid': v$.password.$error}"
-                               class="form-control" v-model.trim="v$.password.$model"
-                               placeholder="Actuel">
-                        <div v-for="error of v$.password.$errors" :key="error.$uid" class="error">
-                            <span>{{error.$message}}</span>
-                        </div>
-                        <input type="password" id="password-new" :class="{'is-invalid': v$.newPassword.$error}"
-                               class="form-control"
-                               v-model.trim="v$.newPassword.$model" placeholder="Nouveau mot de passe">
-                        <div v-for="error of v$.newPassword.$errors" :key="error.$uid" class="error">
-                            <span>{{error.$message}}</span>
-                        </div>
-                        <div v-if="signUpErrorPassword" class="error2">
-                            <span>{{signUpErrorPassword}}</span>
-                        </div>
-                    </div>
-
-                    <button class="btn-send-data btn-primary">Appliquer</button>
-                </form>
-
-                <div class="btns">
-                    <button type="button" v-on:click="toggleDelete" class="btn-deleted btn-primary">Supprimer le
-                        compte
-                    </button>
-                </div>
-            </div>
-
-        </div>
-        <div class="bloc-register" v-if="showDelete">
-            <div class="overlay" v-on:click="toggleDelete"></div>
-            <div class="register card">
-                <div class="header">
-                    <div class="title">
-                        <p>Voulez vous vraiment supprimer votre compte?</p>
-                    </div>
-                    <div v-on:click="toggleDelete" class="btn-close btn "></div>
-                </div>
-                <div class="btns-popup">
-                    <button v-on:click="deleteCompte" class="btn-yes">Confirmer</button>
-                    <button v-on:click="toggleDelete" class="btn-no">Annuler</button>
 
                 </div>
-
             </div>
         </div>
     </div>

@@ -1,68 +1,70 @@
 <template>
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <ul>
-                        <li class="logo-photo">
-                            <router-link to="/accueil">
-                                <img src="../../assets/icon-left-font.png" alt="logo de Groupomania">
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link class="home" to="/accueil">Home</router-link>
-                        </li>
-                    </ul>
-                </div>
-                <div class="menu">
-                    <ul>
-                        <li>
-                            <router-link to="/profile" class="profile">
-                                <UserIcon :user="myUser" :size="40"></UserIcon>
-                                <p>{{myUser.pseudo}}</p>
-                            </router-link>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" v-on:click="handleLogout" class="icon-signOut">
-                                <font-awesome-icon icon="sign-out-alt"/>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+    <div>
+        <header>
+            <div class="container">
+                <nav>
+                    <div class="logo">
+                        <ul>
+                            <li class="logo-photo">
+                                <router-link to="/accueil">
+                                    <img src="../../assets/icon-left-font.png" alt="logo de Groupomania">
+                                </router-link>
+                            </li>
+                            <li>
+                                <router-link class="home" to="/accueil">Accueil</router-link>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="menu">
+                        <ul>
+                            <li>
+                                <router-link to="/profile" class="profile">
+                                    <UserIcon :user="myUser" :size="40"></UserIcon>
+                                    <p>{{myUser.pseudo}}</p>
+                                </router-link>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" v-on:click="handleLogout" class="icon-signOut">
+                                    <font-awesome-icon icon="sign-out-alt"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <div class="nav-mobile">
+            <ul class="logo">
+                <li>
+                    <router-link to="/accueil">
+                        <img src="../../assets/icon-left-font.png" alt="logo de Groupomania">
+                    </router-link>
+                </li>
+                <li>
+                    <font-awesome-icon v-on:click="toggleMenuPopup" class="bars" icon="bars"/>
+                </li>
+            </ul>
+            <ul class="menu" v-if="showMenu">
+                <li>
+                    <router-link to="/accueil" class="profile">
+                        <font-awesome-icon icon="home" class="user"/>
+                        <p>Accueil</p>
+                    </router-link>
+                </li>
+                <li>
+                    <router-link to="/profile" class="profile">
+                        <font-awesome-icon icon="user" class="user"/>
+                        <p>{{myUser.pseudo}}</p>
+                    </router-link>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" v-on:click="handleLogout" class="profile">
+                        <font-awesome-icon icon="sign-out-alt" class="user"/>
+                        <p>Déconnexion</p>
+                    </a>
+                </li>
+            </ul>
         </div>
-    </header>
-    <div class="nav-mobile">
-        <ul class="logo">
-            <li>
-                <router-link to="/accueil">
-                    <img src="../../assets/icon-left-font.png" alt="logo de Groupomania">
-                </router-link>
-            </li>
-            <li>
-                <font-awesome-icon v-on:click="toggleMenuPopup" class="bars" icon="bars"/>
-            </li>
-        </ul>
-        <ul class="menu" v-if="showMenu">
-            <li>
-                <router-link to="/accueil" class="profile">
-                    <font-awesome-icon icon="home" class="user"/>
-                    <p>Accueil</p>
-                </router-link>
-            </li>
-            <li>
-                <router-link to="/profile" class="profile">
-                    <font-awesome-icon icon="user" class="user"/>
-                    <p>{{myUser.pseudo}}</p>
-                </router-link>
-            </li>
-            <li>
-                <a href="javascript:void(0)" v-on:click="handleLogout" class="profile">
-                    <font-awesome-icon icon="sign-out-alt" class="user"/>
-                    <p>Déconnexion</p>
-                </a>
-            </li>
-        </ul>
     </div>
 
 

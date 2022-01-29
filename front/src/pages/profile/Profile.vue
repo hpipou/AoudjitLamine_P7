@@ -124,6 +124,7 @@
         },
         data() {
             let myUser = JSON.parse(localStorage.getItem('user'));
+            if(myUser==null){this.$router.push('/');}
             return {
                 showDelete: false,
                 url: null,

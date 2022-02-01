@@ -4,7 +4,9 @@ Les étapes pour lancer le projet :
 
 ## IMPORTANT :
 
-il faut installer sur votre systeme d'exploitation MySQL avant de lancer le backend.
+```
+il faut installer sur votre systeme d'exploitation MySQL et créer une base de donnée "mon_entreprise" avant de lancer le backend.
+```
 
 1. Backend :
 
